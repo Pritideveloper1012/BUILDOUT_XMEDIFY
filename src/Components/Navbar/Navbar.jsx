@@ -4,10 +4,10 @@ import styles from "./Navbar.module.css";
 import logo from '../../assets/logo.png';
 
 const Navbar = () => (
-  <nav className="navbar navbar-expand-md  ">
+  <nav className="navbar navbar-expand-sm  ">
     <div className="container">
       <Link className="navbar-brand" to="/">
-        <img src={logo} alt="logo" className={styles.logo} width="80" height="80" />
+        <img src={logo} alt="logo" className={styles.logo} width="60" height="50" />
       </Link>
 
       {/* Toggle button for mobile view */}

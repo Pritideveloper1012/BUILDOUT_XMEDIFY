@@ -1,0 +1,25 @@
+.bg-white {
+  background-color: #ffffff !important;
+}
+
+.swapper-pagination {
+  width: 100px !important;
+  height: 10px;
+  background-color: #ddd;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+.mySwiper {
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+}
+
+.swiper-pagination-bullet {
+  background-color: #007bff;
+  opacity: 0.6;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+}
