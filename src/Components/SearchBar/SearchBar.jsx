@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { fetchStates, fetchCities } from "../../utils/api";
+import { fetchStates, fetchCities } from "../../Utils/Api";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import 'bootstrap-icons/font/bootstrap-icons.css';
-
 
 const SearchBar = () => {
   const [states, setStates] = useState([]);
@@ -94,7 +92,7 @@ const SearchBar = () => {
             </button>
           </div>
         </div>
-      
+        {/* 👆 All Inputs in one row div */}
       </div>
     </div>
   );
