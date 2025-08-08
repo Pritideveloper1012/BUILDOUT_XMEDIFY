@@ -5,7 +5,6 @@ const BookingModal = ({ show, onHide, center }) => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
 
-  // Set default date to today and reset time when modal opens
   useEffect(() => {
     if (show) {
       const today = new Date().toISOString().split("T")[0];
@@ -19,7 +18,6 @@ const BookingModal = ({ show, onHide, center }) => {
       alert("No hospital selected!");
       return;
     }
-
     const booking = { center, bookingDate: date, bookingTime: time };
     const existing = JSON.parse(localStorage.getItem("bookings")) || [];
     localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
@@ -42,7 +40,6 @@ const BookingModal = ({ show, onHide, center }) => {
               value={date}
               onChange={(e) => setDate(e.target.value)}
             />
-            {/* Show "Today" if selected date is today */}
             {date === new Date().toISOString().split("T")[0] && (
               <p className="text-muted mb-3">Today</p>
             )}
@@ -58,7 +55,6 @@ const BookingModal = ({ show, onHide, center }) => {
               <option>05:00 PM</option>
             </Form.Select>
 
-            {/* Show label text for selected time */}
             {time && (
               <p className="text-muted mb-3">
                 {(() => {
