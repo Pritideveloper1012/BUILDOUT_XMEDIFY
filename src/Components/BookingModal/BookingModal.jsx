@@ -5,12 +5,12 @@ const BookingModal = ({ show, onHide, center }) => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
 
-  // Set default date when modal opens
+  // Set default date to today and reset time when modal opens
   useEffect(() => {
     if (show) {
       const today = new Date().toISOString().split("T")[0];
       setDate(today);
-      setTime(""); // no default time initially
+      setTime("");
     }
   }, [show]);
 
@@ -32,6 +32,7 @@ const BookingModal = ({ show, onHide, center }) => {
       <Modal.Header closeButton>
         <Modal.Title>Book Appointment</Modal.Title>
       </Modal.Header>
+
       <Modal.Body>
         <Form>
           <Form.Group>
@@ -41,6 +42,7 @@ const BookingModal = ({ show, onHide, center }) => {
               value={date}
               onChange={(e) => setDate(e.target.value)}
             />
+            {/* Show "Today" if selected date is today */}
             {date === new Date().toISOString().split("T")[0] && (
               <p className="text-muted mb-3">Today</p>
             )}
@@ -48,10 +50,7 @@ const BookingModal = ({ show, onHide, center }) => {
 
           <Form.Group className="mt-3">
             <Form.Label>Select Time</Form.Label>
-            <Form.Select
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            >
+            <Form.Select value={time} onChange={(e) => setTime(e.target.value)}>
               <option value="">Choose...</option>
               <option>10:00 AM</option>
               <option>12:00 PM</option>
@@ -59,13 +58,22 @@ const BookingModal = ({ show, onHide, center }) => {
               <option>05:00 PM</option>
             </Form.Select>
 
-            {/* Show "Morning" text if time is 10:00 AM */}
-            {time === "10:00 AM" && (
-              <p className="text-muted mb-3">Morning</p>
+            {/* Show label text for selected time */}
+            {time && (
+              <p className="text-muted mb-3">
+                {(() => {
+                  if (time === "10:00 AM") return "Morning";
+                  if (time === "12:00 PM") return "Noon";
+                  if (time === "03:00 PM") return "Afternoon";
+                  if (time === "05:00 PM") return "Evening";
+                  return null;
+                })()}
+              </p>
             )}
           </Form.Group>
         </Form>
       </Modal.Body>
+
       <Modal.Footer>
         <Button onClick={handleBook} disabled={!date || !time}>
           Book
