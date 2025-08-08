@@ -36,22 +36,22 @@ const Search = () => {
         ) : (
           <>
             <h1>
-              {centers.length} medical centers available in {city?.toLowerCase()}
+              {centers.length} medical centers available in{" "}
+              {city?.toLowerCase()}
             </h1>
             {centers.length === 0 ? (
               <p>
                 No medical centers found in {city}, {state}.
               </p>
             ) : (
-              <div>
+              <ul>
                 {centers.map((center) => (
-                  <div key={center.id} className="mb-4">
+                  <li key={center.id}>
                     <h3>{center["Hospital Name"]}</h3>
                     <HospitalCard data={center} />
-                   
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
           </>
         )}
