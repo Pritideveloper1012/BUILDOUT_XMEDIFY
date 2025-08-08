@@ -48,9 +48,7 @@ const Search = () => {
                   <div key={center.id} className="mb-4">
                     <h3>{center["Hospital Name"]}</h3>
                     <HospitalCard data={center} />
-                    <button className="btn btn-primary mt-2">
-                      Book FREE Center Visit
-                    </button>
+                   
                   </div>
                 ))}
               </div>

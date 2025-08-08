@@ -18,12 +18,15 @@ const SearchBar = () => {
   useEffect(() => {
     if (selectedState) {
       fetchCities(selectedState).then(setCities);
+      setSelectedCity("");
     } else {
       setCities([]);
+      setSelectedCity("");
     }
   }, [selectedState]);
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    e.preventDefault(); // prevent form reload if inside form
     if (selectedState && selectedCity) {
       setLoading(true);
       setTimeout(() => {
@@ -35,7 +38,7 @@ const SearchBar = () => {
 
   return (
     <div className="container">
-      <div className="p-4 shadow rounded bg-white" style={{ margin: "0 auto" }}>
+      <form className="p-4 shadow rounded bg-white" style={{ margin: "0 auto" }} onSubmit={handleSearch}>
         <div className="row g-3 align-items-center" id="search-controls">
           {/* State Dropdown */}
           <div className="col-md-5" id="state">
@@ -86,14 +89,13 @@ const SearchBar = () => {
               id="searchBtn"
               className="btn btn-primary"
               type="submit"
-              onClick={handleSearch}
-              disabled={loading}
+              disabled={loading || !selectedState || !selectedCity}
             >
               {loading ? "Searching..." : "Search"}
             </button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
