@@ -1,3 +1,5 @@
+import React from "react";
+
 const formatDate = (dateStr) => {
   if (!dateStr) return "N/A";
   const options = { year: "numeric", month: "long", day: "numeric" };
@@ -16,8 +18,8 @@ const MyBookings = () => {
       ) : (
         bookings.map((b, i) => {
           const center = b.center || b;
-          const bookingDate = formatDate(b.date || b.bookingDate);
-          const bookingTime = b.time || b.bookingTime || "N/A";
+          const bookingDate = formatDate(b.bookingDate || b.date);
+          const bookingTime = b.bookingTime || b.time || "N/A";
 
           return (
             <div key={i} className="border p-3 mb-3 rounded">
@@ -27,8 +29,12 @@ const MyBookings = () => {
                 {center.City || "Unknown city"},{" "}
                 {center.State || "Unknown state"}
               </p>
-              <p><strong>Date:</strong> {bookingDate}</p>
-              <p><strong>Time:</strong> {bookingTime}</p>
+              <p>
+                <strong>Date:</strong> {bookingDate}
+              </p>
+              <p>
+                <strong>Time:</strong> {bookingTime}
+              </p>
             </div>
           );
         })

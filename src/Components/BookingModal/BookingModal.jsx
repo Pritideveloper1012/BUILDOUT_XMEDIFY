@@ -1,30 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
-const BookingModal = ({ show, onHide, center }) => {
-  const todayISO = new Date().toISOString().split("T")[0];
-  const maxDateISO = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-    .toISOString()
-    .split("T")[0];
+const getTimeLabel = (time) => {
+  switch (time) {
+    case "10:00 AM":
+      return "Morning";
+    case "12:00 PM":
+      return "Noon";
+    case "03:00 PM":
+      return "Afternoon";
+    case "05:00 PM":
+      return "Evening";
+    default:
+      return null;
+  }
+};
 
+const BookingModal = ({ show, onHide, center }) => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
 
   useEffect(() => {
     if (show) {
-      setDate(todayISO);
-      setTime(""); // Reset time selection when modal opens
-      console.log("Modal opened - date set to:", todayISO);
+      const today = new Date().toISOString().split("T")[0];
+      setDate(today);
+      setTime(""); // Reset time on modal open
     }
-  }, [show, todayISO]);
-
-  useEffect(() => {
-    console.log("Selected date:", date);
-  }, [date]);
-
-  useEffect(() => {
-    console.log("Selected time:", time);
-  }, [time]);
+  }, [show]);
 
   const handleBook = () => {
     if (!center) {
@@ -39,7 +41,7 @@ const BookingModal = ({ show, onHide, center }) => {
   };
 
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal show={show} onHide={onHide} data-testid="booking-modal">
       <Modal.Header closeButton>
         <Modal.Title>Book Appointment</Modal.Title>
       </Modal.Header>
@@ -52,17 +54,25 @@ const BookingModal = ({ show, onHide, center }) => {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              min={todayISO}
-              max={maxDateISO}
+              min={new Date().toISOString().split("T")[0]}
+              max={
+                new Date(
+                  Date.now() + 7 * 24 * 60 * 60 * 1000
+                ).toISOString().split("T")[0]
+              } // allow only within a week ahead
             />
-            {date === todayISO && (
+            {date === new Date().toISOString().split("T")[0] && (
               <p className="text-muted mb-3">Today</p>
             )}
           </Form.Group>
 
           <Form.Group className="mt-3">
             <Form.Label>Select Time</Form.Label>
-            <Form.Select value={time} onChange={(e) => setTime(e.target.value)}>
+            <Form.Select
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              data-testid="time-select"
+            >
               <option value="">Choose...</option>
               <option value="10:00 AM">10:00 AM</option>
               <option value="12:00 PM">12:00 PM</option>
@@ -70,25 +80,22 @@ const BookingModal = ({ show, onHide, center }) => {
               <option value="05:00 PM">05:00 PM</option>
             </Form.Select>
 
-            {time && (
-              <p className="text-muted mb-3">
-                {time === "10:00 AM"
-                  ? "Morning"
-                  : time === "12:00 PM"
-                  ? "Noon"
-                  : time === "03:00 PM"
-                  ? "Afternoon"
-                  : time === "05:00 PM"
-                  ? "Evening"
-                  : null}
+            {time ? (
+              <p className="text-muted mb-3" data-testid="time-label">
+                {getTimeLabel(time)}
               </p>
-            )}
+            ) : null}
+
+            {/* Debug info: Remove before final submit */}
+            <p style={{ fontSize: "10px", color: "red" }} data-testid="debug-time">
+              Selected time: {time} - Label: {getTimeLabel(time) || "None"}
+            </p>
           </Form.Group>
         </Form>
       </Modal.Body>
 
       <Modal.Footer>
-        <Button onClick={handleBook} disabled={!date || !time}>
+        <Button onClick={handleBook} disabled={!date || !time} data-testid="book-btn">
           Book
         </Button>
       </Modal.Footer>
