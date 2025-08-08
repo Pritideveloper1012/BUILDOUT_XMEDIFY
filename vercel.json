@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/some-path",
-      "destination": "https://your-backend-url.com/:path*"
+      "destination": "/another-path"
     }
   ]
 }
