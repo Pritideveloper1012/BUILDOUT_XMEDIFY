@@ -1,7 +1,6 @@
 import React from "react";
 
 const MyBookings = () => {
-  // Read bookings from localStorage
   const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
 
   return (
@@ -12,14 +11,14 @@ const MyBookings = () => {
       ) : (
         bookings.map((b, i) => (
           <div key={i} className="border p-3 mb-3 rounded">
-            <h3>{b?.center?.["Hospital Name"] || "Unknown Hospital"}</h3>
+            <h3>{b["Hospital Name"] || "Unknown Hospital"}</h3>
             <p>
-              {b?.center?.Address || "No address"},{" "}
-              {b?.center?.City || "Unknown city"},{" "}
-              {b?.center?.State || "Unknown state"}
+              {b.Address || "No address"},{" "}
+              {b.City || "Unknown city"},{" "}
+              {b.State || "Unknown state"}
             </p>
-            <p><strong>Date:</strong> {b?.date || "N/A"}</p>
-            <p><strong>Time:</strong> {b?.time || "N/A"}</p>
+            <p><strong>Date:</strong> {b.bookingDate || "N/A"}</p>
+            <p><strong>Time:</strong> {b.bookingTime || "N/A"}</p>
           </div>
         ))
       )}
