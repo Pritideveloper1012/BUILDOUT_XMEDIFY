@@ -14,22 +14,37 @@ const Search = () => {
   const state = params.get("state");
   const city = params.get("city");
 
-  useEffect(() => {
+ useEffect(() => {
+  if (state && city) {
     fetchMedicalCenters(state, city).then(data => {
       setCenters(data);
       setLoading(false);
     });
-  }, [state, city]);
+  } else {
+    setLoading(false);
+  }
+}, [state, city]);
 
   return (
     <>
     <SearchBar />
-    <div className="container my-4">
+  <div className="container my-4">
+  {loading ? (
+    <p>Loading...</p>
+  ) : (
+    <>
       <h4>{centers.length} medical centers available in {state}</h4>
-      {loading ? <p>Loading...</p> : (
-        centers.map(center => <HospitalCard key={center.id} data={center} />)
+      {centers.length === 0 ? (
+        <p>No medical centers found in {city}, {state}.</p>
+      ) : (
+        centers.map(center => (
+          <HospitalCard key={center.id} data={center} />
+        ))
       )}
-    </div>
+    </>
+  )}
+</div>
+
     <FAQs />
     <DownloadApp />
     </>
