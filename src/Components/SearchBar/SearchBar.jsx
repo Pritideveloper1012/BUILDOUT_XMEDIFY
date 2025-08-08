@@ -43,7 +43,7 @@ const SearchBar = () => {
                 <i className="bi bi-geo-alt"></i>
               </span>
               <select
-                id="state"
+                
                 className="form-select"
                 value={selectedState}
                 onChange={(e) => setSelectedState(e.target.value)}
@@ -63,7 +63,7 @@ const SearchBar = () => {
                  <i className="bi bi-geo-alt"></i>
               </span>
               <select
-                id="city"
+               
                 className="form-select"
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}

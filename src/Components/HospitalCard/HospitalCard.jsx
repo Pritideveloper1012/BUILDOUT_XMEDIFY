@@ -7,6 +7,7 @@ function HospitalCard({data}) {
   
   return (
     <>
+    <li>
       <Card className="my-3">
         <Card.Body>
           <Card.Title>{data["Hospital Name"]}</Card.Title>
@@ -18,7 +19,9 @@ function HospitalCard({data}) {
           <Button onClick={() => setShow(true)}>Book FREE Center Visit</Button>
         </Card.Body>
       </Card>
+        </li>
       <BookingModal show={show} onHide={() => setShow(false)} center={data} />
+      
     </>
   );
 }

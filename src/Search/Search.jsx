@@ -5,7 +5,7 @@ import HospitalCard from "../Components/HospitalCard/HospitalCard";
 import SearchBar from "../Components/SearchBar/SearchBar";
 import FAQs from "../Components/Sections/FAQs/FAQs";
 import DownloadApp from "../Components/Sections/DownloadApp/DownloadApp";
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const Search = () => {
   const [params] = useSearchParams();
@@ -15,39 +15,45 @@ const Search = () => {
   const state = params.get("state");
   const city = params.get("city");
 
- useEffect(() => {
-  if (state && city) {
-    fetchMedicalCenters(state, city).then(data => {
-      setCenters(data);
+  useEffect(() => {
+    if (state && city) {
+      fetchMedicalCenters(state, city).then((data) => {
+        setCenters(data);
+        setLoading(false);
+      });
+    } else {
       setLoading(false);
-    });
-  } else {
-    setLoading(false);
-  }
-}, [state, city]);
+    }
+  }, [state, city]);
 
   return (
     <>
-    <SearchBar />
-  <div className="container my-4">
-  {loading ? (
-    <p>Loading...</p>
-  ) : (
-    <>
-      <h4>{centers.length} medical centers available in {state}</h4>
-      {centers.length === 0 ? (
-        <p>No medical centers found in {city}, {state}.</p>
-      ) : (
-        centers.map(center => (
-          <HospitalCard key={center.id} data={center} />
-        ))
-      )}
-    </>
-  )}
-</div>
+      <SearchBar />
+      <div className="container my-4">
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            <h4>
+              {centers.length} medical centers available in {state}
+            </h4>
+            {centers.length === 0 ? (
+              <p>
+                No medical centers found in {city}, {state}.
+              </p>
+            ) : (
+              <ul>
+                {centers.map((center) => (
+                  <HospitalCard key={center.id} data={center} />
+                ))}
+              </ul>
+            )}
+          </>
+        )}
+      </div>
 
-    <FAQs />
-    <DownloadApp />
+      <FAQs />
+      <DownloadApp />
     </>
   );
 };
