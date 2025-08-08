@@ -13,18 +13,6 @@ const BookingModal = ({ show, onHide, center }) => {
     }
   }, [show]);
 
-  const isDateToday = () => date === new Date().toISOString().split("T")[0];
-
-  const getTimeLabel = (time) => {
-    switch (time) {
-      case "10:00 AM": return "Morning";
-      case "12:00 PM": return "Noon";
-      case "03:00 PM": return "Afternoon";
-      case "05:00 PM": return "Evening";
-      default: return null;
-    }
-  };
-
   const handleBook = () => {
     if (!center) {
       alert("No hospital selected!");
@@ -39,35 +27,54 @@ const BookingModal = ({ show, onHide, center }) => {
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton><Modal.Title>Book Appointment</Modal.Title></Modal.Header>
+      <Modal.Header closeButton>
+        <Modal.Title>Book Appointment</Modal.Title>
+      </Modal.Header>
+
       <Modal.Body>
         <Form>
           <Form.Group>
             <Form.Label>Select Date</Form.Label>
             <Form.Control
               type="date"
-              min={new Date().toISOString().split("T")[0]}
-              max={new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
               value={date}
-              onChange={e => setDate(e.target.value)}
+              onChange={(e) => setDate(e.target.value)}
             />
-            {isDateToday() && <p>Today</p>}
+            {date === new Date().toISOString().split("T")[0] && (
+              <p className="text-muted mb-3">Today</p>
+            )}
           </Form.Group>
+
           <Form.Group className="mt-3">
             <Form.Label>Select Time</Form.Label>
-            <Form.Select value={time} onChange={e => setTime(e.target.value)}>
+            <Form.Select value={time} onChange={(e) => setTime(e.target.value)}>
               <option value="">Choose...</option>
               <option value="10:00 AM">10:00 AM</option>
               <option value="12:00 PM">12:00 PM</option>
               <option value="03:00 PM">03:00 PM</option>
               <option value="05:00 PM">05:00 PM</option>
             </Form.Select>
-            {time && <p>{getTimeLabel(time)}</p>}
+            {time && (
+              <p className="text-muted mb-3">
+                {time === "10:00 AM"
+                  ? "Morning"
+                  : time === "12:00 PM"
+                  ? "Noon"
+                  : time === "03:00 PM"
+                  ? "Afternoon"
+                  : time === "05:00 PM"
+                  ? "Evening"
+                  : null}
+              </p>
+            )}
           </Form.Group>
         </Form>
       </Modal.Body>
+
       <Modal.Footer>
-        <Button onClick={handleBook} disabled={!date || !time}>Book</Button>
+        <Button onClick={handleBook} disabled={!date || !time}>
+          Book
+        </Button>
       </Modal.Footer>
     </Modal>
   );
