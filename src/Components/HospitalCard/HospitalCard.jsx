@@ -7,8 +7,7 @@ function HospitalCard({ data }) {
 
   return (
     <>
-      <li
-        style={{ listStyleType: "none", cursor: "pointer" }}
+      <div style={{ cursor: "pointer" }}
         onClick={() => setShow(true)}
       >
         <Card className="my-3">
@@ -21,12 +20,12 @@ function HospitalCard({ data }) {
             </Card.Text>
 
             {/* Optional: keep the button too (clicking either li or button opens modal) */}
-            <Button onClick={(e) => { e.stopPropagation(); setShow(true); }}>
+            <Button style={{ cursor: "pointer", all: "unset" }} onClick={(e) => { e.stopPropagation(); setShow(true); }}>
               Book FREE Center Visit
             </Button>
           </Card.Body>
         </Card>
-      </li>
+      </div>
 
       <BookingModal show={show} onHide={() => setShow(false)} center={data} />
     </>

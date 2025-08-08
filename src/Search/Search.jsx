@@ -48,7 +48,9 @@ const Search = () => {
                 {centers.map((center) => (
                   <li key={center.id}>
                     <h3>{center["Hospital Name"]}</h3>
-                    <HospitalCard data={center} />
+                    <div>
+                      <HospitalCard data={center} />
+                    </div>
                   </li>
                 ))}
               </ul>
