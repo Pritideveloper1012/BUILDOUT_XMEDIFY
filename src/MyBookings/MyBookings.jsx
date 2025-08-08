@@ -1,4 +1,9 @@
-import React from "react";
+const formatDate = (dateStr) => {
+  if (!dateStr) return "N/A";
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  const d = new Date(dateStr);
+  return d.toLocaleDateString(undefined, options);
+};
 
 const MyBookings = () => {
   const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
@@ -10,9 +15,8 @@ const MyBookings = () => {
         <p>No bookings yet.</p>
       ) : (
         bookings.map((b, i) => {
-          // Extract hospital info and booking date/time, support both nested and flat format
-          const center = b.center || b; // if nested, use center; else fallback to flat booking object
-          const bookingDate = b.date || b.bookingDate || "N/A";
+          const center = b.center || b;
+          const bookingDate = formatDate(b.date || b.bookingDate);
           const bookingTime = b.time || b.bookingTime || "N/A";
 
           return (

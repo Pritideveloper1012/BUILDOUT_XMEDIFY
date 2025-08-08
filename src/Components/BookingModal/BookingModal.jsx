@@ -9,7 +9,7 @@ const BookingModal = ({ show, onHide, center }) => {
     if (show) {
       const today = new Date().toISOString().split("T")[0];
       setDate(today);
-      setTime("");
+      setTime("10:00 AM");  // Default to 10:00 AM for "Morning"
     }
   }, [show]);
 
