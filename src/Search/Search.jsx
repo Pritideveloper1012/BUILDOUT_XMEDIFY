@@ -16,15 +16,17 @@ const Search = () => {
   const city = params.get("city");
 
   useEffect(() => {
-    if (state && city) {
-      fetchMedicalCenters(state, city).then((data) => {
-        setCenters(data);
-        setLoading(false);
-      });
-    } else {
+  if (state && city) {
+    setLoading(true);
+    fetchMedicalCenters(state, city).then((data) => {
+      setCenters(data);
       setLoading(false);
-    }
-  }, [state, city]);
+    });
+  } else {
+    setLoading(false);
+  }
+}, [state, city]);
+
 
   return (
     <>
@@ -44,7 +46,9 @@ const Search = () => {
             ) : (
               <ul>
                 {centers.map((center) => (
-                  <HospitalCard key={center.id} data={center} />
+                  <li key={center.id}>
+                    <HospitalCard data={center} />
+                  </li>
                 ))}
               </ul>
             )}
