@@ -2,16 +2,29 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 const BookingModal = ({ show, onHide, center }) => {
+  const todayISO = new Date().toISOString().split("T")[0];
+  const maxDateISO = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split("T")[0];
+
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
 
   useEffect(() => {
     if (show) {
-      const today = new Date().toISOString().split("T")[0];
-      setDate(today);
-      setTime("");
+      setDate(todayISO);
+      setTime(""); // Reset time selection when modal opens
+      console.log("Modal opened - date set to:", todayISO);
     }
-  }, [show]);
+  }, [show, todayISO]);
+
+  useEffect(() => {
+    console.log("Selected date:", date);
+  }, [date]);
+
+  useEffect(() => {
+    console.log("Selected time:", time);
+  }, [time]);
 
   const handleBook = () => {
     if (!center) {
@@ -39,8 +52,10 @@ const BookingModal = ({ show, onHide, center }) => {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
+              min={todayISO}
+              max={maxDateISO}
             />
-            {date === new Date().toISOString().split("T")[0] && (
+            {date === todayISO && (
               <p className="text-muted mb-3">Today</p>
             )}
           </Form.Group>
@@ -54,6 +69,7 @@ const BookingModal = ({ show, onHide, center }) => {
               <option value="03:00 PM">03:00 PM</option>
               <option value="05:00 PM">05:00 PM</option>
             </Form.Select>
+
             {time && (
               <p className="text-muted mb-3">
                 {time === "10:00 AM"

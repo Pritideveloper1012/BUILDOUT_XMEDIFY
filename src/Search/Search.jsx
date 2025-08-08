@@ -37,8 +37,9 @@ const Search = () => {
           <>
             <h1>
               {centers.length} medical centers available in{" "}
-              {city?.toLowerCase()}
+              {city?.toLowerCase() || ""}
             </h1>
+
             {centers.length === 0 ? (
               <p>
                 No medical centers found in {city}, {state}.
