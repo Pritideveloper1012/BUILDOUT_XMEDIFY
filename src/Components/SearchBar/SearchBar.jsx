@@ -1,188 +1,95 @@
-import React, { useEffect, useState, useRef } from "react";
-import { fetchStates, fetchCities } from "../../Utils/Api";
-import { useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState} from "react";
+import { Modal, Button, Form } from "react-bootstrap";
 
-const SearchBar = () => {
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+import dayjs from "dayjs";
 
-  // Dropdown open/close state
-  const [stateOpen, setStateOpen] = useState(false);
-  const [cityOpen, setCityOpen] = useState(false);
+const BookingModal = ({ show, onHide, center }) => {
+  const [dayIdx, setDayIdx] = useState(0);
+  const [selectedSlot, setSelectedSlot] = useState(null);
 
-  const stateRef = useRef(null);
-  const cityRef = useRef(null);
+  // Generate 7 days
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = dayjs().add(i, "day");
+    days.push(d);
+  }
 
-  useEffect(() => {
-    fetchStates().then(setStates);
-  }, []);
+  // Define slots per period
+  const slots = {
+    Morning: ["10:00 AM", "11:00 AM"],
+    Afternoon: ["12:00 PM", "03:00 PM"],
+    Evening: ["05:00 PM", "06:00 PM"],
+  };
 
-  useEffect(() => {
-    if (selectedState) {
-      fetchCities(selectedState).then(setCities);
-      setSelectedCity("");
-    } else {
-      setCities([]);
-      setSelectedCity("");
+  const handleBook = () => {
+    if (!center) {
+      alert("No hospital selected!");
+      return;
     }
-  }, [selectedState]);
-
-  // Close dropdown if clicked outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (stateRef.current && !stateRef.current.contains(event.target)) {
-        setStateOpen(false);
-      }
-      if (cityRef.current && !cityRef.current.contains(event.target)) {
-        setCityOpen(false);
-      }
+    if (!selectedSlot) {
+      alert("Please select a time slot!");
+      return;
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (selectedState && selectedCity) {
-      setLoading(true);
-      setTimeout(() => {
-        navigate(`/search?state=${selectedState}&city=${selectedCity}`);
-        setLoading(false);
-      }, 500);
-    }
+    const booking = {
+      center,
+      bookingDate: days[dayIdx].format("YYYY-MM-DD"),
+      bookingTime: selectedSlot,
+    };
+    const existing = JSON.parse(localStorage.getItem("bookings")) || [];
+    localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
+    alert("Appointment Booked!");
+    onHide();
   };
 
   return (
-    <div className="container">
-      <form
-        className="p-4 shadow rounded bg-white"
-        style={{ margin: "0 auto" }}
-        onSubmit={handleSearch}
-      >
-        <div className="row g-3 align-items-center" id="search-controls">
-          {/* State Dropdown */}
-          <div
-            className="col-md-5"
-            id="state"
-            ref={stateRef}
-            style={{ position: "relative" }}
-          >
-            <div
-              className="input-group"
-              onClick={() => setStateOpen((prev) => !prev)}
-              style={{ cursor: "pointer" }}
-              tabIndex={0}
-            >
-              <span className="input-group-text">
-                <i className="bi bi-geo-alt"></i>
-              </span>
-              <input
-                type="text"
-                className="form-control"
-                readOnly
-                value={selectedState || "Select State"}
-                aria-haspopup="listbox"
-                aria-expanded={stateOpen}
-              />
-            </div>
-            {stateOpen && (
-              <ul
-                className="list-group position-absolute w-100"
-                style={{ maxHeight: "150px", overflowY: "auto", zIndex: 1000 }}
-                role="listbox"
+    <Modal show={show} onHide={onHide} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Book Appointment</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div>
+          {/* Date Selector */}
+          <div>
+            {days.map((day, idx) => (
+              <button
+                key={idx}
+                onClick={() => setDayIdx(idx)}
+                style={{ fontWeight: dayIdx === idx ? "bold" : "normal" }}
               >
-                {states.map((state) => (
-                  <li
-                    key={state}
-                    className="list-group-item list-group-item-action"
-                    onClick={() => {
-                      setSelectedState(state);
-                      setStateOpen(false);
-                    }}
-                    role="option"
-                    aria-selected={selectedState === state}
-                    tabIndex={-1}
-                  >
-                    {state}
-                  </li>
-                ))}
-              </ul>
-            )}
+                {day.format("ddd, MMM D")}
+              </button>
+            ))}
           </div>
 
-          {/* City Dropdown */}
-          <div
-            className="col-md-5"
-            id="city"
-            ref={cityRef}
-            style={{ position: "relative" }}
-          >
-            <div
-              className="input-group"
-              onClick={() => {
-                if (selectedState) setCityOpen((prev) => !prev);
-              }}
-              style={{ cursor: selectedState ? "pointer" : "not-allowed" }}
-              tabIndex={0}
-            >
-              <span className="input-group-text">
-                <i className="bi bi-geo-alt"></i>
-              </span>
-              <input
-                type="text"
-                className="form-control"
-                readOnly
-                value={selectedCity || "Select City"}
-                aria-haspopup="listbox"
-                aria-expanded={cityOpen}
-                disabled={!selectedState}
-              />
-            </div>
-            {cityOpen && (
-              <ul
-                className="list-group position-absolute w-100"
-                style={{ maxHeight: "150px", overflowY: "auto", zIndex: 1000 }}
-                role="listbox"
-              >
-                {cities.map((city) => (
-                  <li
-                    key={city}
-                    className="list-group-item list-group-item-action"
-                    onClick={() => {
-                      setSelectedCity(city);
-                      setCityOpen(false);
+          {/* Slots */}
+          {Object.entries(slots).map(([period, times]) => (
+            <div key={period}>
+              <h5>{period}</h5>
+              <div>
+                {times.map((time) => (
+                  <button
+                    key={time}
+                    onClick={() => setSelectedSlot(time)}
+                    style={{
+                      backgroundColor: selectedSlot === time ? "green" : "",
+                      color: selectedSlot === time ? "white" : "",
+                      marginRight: 5,
                     }}
-                    role="option"
-                    aria-selected={selectedCity === city}
-                    tabIndex={-1}
                   >
-                    {city}
-                  </li>
+                    {time}
+                  </button>
                 ))}
-              </ul>
-            )}
-          </div>
-
-          {/* Search Button */}
-          <div className="col-md-2 d-grid">
-            <button
-              id="searchBtn"
-              className="btn btn-primary"
-              type="submit"
-              disabled={loading || !selectedState || !selectedCity}
-            >
-              {loading ? "Searching..." : "Search"}
-            </button>
-          </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </form>
-    </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={handleBook} disabled={!selectedSlot}>
+          Book
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
-
-export default SearchBar;
+export default BookingModal
