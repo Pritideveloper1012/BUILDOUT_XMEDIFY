@@ -21,7 +21,8 @@ const BookingModal = ({ show, onHide }) => {
   };
 
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal show={show} onHide={onHide} animation={false}>
+
       <Modal.Body>
         <Form.Group className="mt-3">
           <Form.Label>Select Time</Form.Label>
@@ -31,7 +32,8 @@ const BookingModal = ({ show, onHide }) => {
             <option value="03:00 PM">03:00 PM</option>
             <option value="05:00 PM">05:00 PM</option>
           </Form.Select>
-          <p className="text-muted mb-3">{getTimeLabel(time)}</p>
+       <p className="text-muted mb-3" data-testid="time-label">{getTimeLabel(time)}</p>
+
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
