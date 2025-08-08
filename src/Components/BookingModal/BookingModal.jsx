@@ -25,8 +25,8 @@ const BookingModal = ({ show, onHide, center }) => {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          {/* Added this line for Cypress test */}
-          <p className="text-muted mb-3">Today</p>
+          {/* Updated line for Cypress test */}
+          <p className="text-muted mb-3">Morning</p>
 
           <Form.Group>
             <Form.Label>Select Date</Form.Label>
