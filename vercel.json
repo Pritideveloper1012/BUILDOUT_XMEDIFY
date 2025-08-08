@@ -1,8 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/some-path",
-      "destination": "/another-path"
+      "source": "/api/:path*",
+      "destination": "https://meddata-backend.onrender.com/api/:path*"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
     }
   ]
 }
