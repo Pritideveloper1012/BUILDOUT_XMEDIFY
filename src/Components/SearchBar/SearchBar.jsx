@@ -37,7 +37,7 @@ const SearchBar = () => {
        
         <div className="row g-3 align-items-center" id="search-controls">
           {/* State Dropdown */}
-          <div className="col-md-5" >
+          <div className="col-md-5" id="state">
             <div className="input-group">
               <span className="input-group-text">
                 <i className="bi bi-geo-alt"></i>
@@ -57,7 +57,7 @@ const SearchBar = () => {
           </div>
 
           {/* City Dropdown */}
-          <div className="col-md-5">
+          <div className="col-md-5" id="city">
             <div className="input-group">
               <span className="input-group-text">
                  <i className="bi bi-geo-alt"></i>
