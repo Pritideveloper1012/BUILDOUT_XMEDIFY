@@ -6,12 +6,12 @@ const BookingModal = ({ show, onHide, center }) => {
   const [time, setTime] = useState("");
 
   const handleBook = () => {
-    const booking = {
-      center,
-      date,
-      time
-    };
+    if (!center) {
+      alert("No hospital selected!");
+      return;
+    }
 
+    const booking = { center, date, time };
     const existing = JSON.parse(localStorage.getItem("bookings")) || [];
     localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
     alert("Appointment Booked!");
@@ -27,12 +27,19 @@ const BookingModal = ({ show, onHide, center }) => {
         <Form>
           <Form.Group>
             <Form.Label>Select Date</Form.Label>
-            <Form.Control type="date" onChange={(e) => setDate(e.target.value)} />
+            <Form.Control
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
           </Form.Group>
           <Form.Group className="mt-3">
             <Form.Label>Select Time</Form.Label>
-            <Form.Select onChange={(e) => setTime(e.target.value)}>
-              <option>Choose...</option>
+            <Form.Select
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            >
+              <option value="">Choose...</option>
               <option>10:00 AM</option>
               <option>12:00 PM</option>
               <option>03:00 PM</option>
@@ -42,7 +49,9 @@ const BookingModal = ({ show, onHide, center }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleBook} disabled={!date || !time}>Book</Button>
+        <Button onClick={handleBook} disabled={!date || !time}>
+          Book
+        </Button>
       </Modal.Footer>
     </Modal>
   );
