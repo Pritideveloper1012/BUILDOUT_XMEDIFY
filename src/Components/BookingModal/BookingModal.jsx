@@ -5,12 +5,12 @@ const BookingModal = ({ show, onHide, center }) => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
 
-  // Set today's date by default when modal opens
+  // Set default date when modal opens
   useEffect(() => {
     if (show) {
       const today = new Date().toISOString().split("T")[0];
       setDate(today);
-      setTime(""); // no default time selected
+      setTime(""); // no default time initially
     }
   }, [show]);
 
@@ -20,7 +20,7 @@ const BookingModal = ({ show, onHide, center }) => {
       return;
     }
 
-    const booking = { center, date, time };
+    const booking = { center, bookingDate: date, bookingTime: time };
     const existing = JSON.parse(localStorage.getItem("bookings")) || [];
     localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
     alert("Appointment Booked!");
@@ -40,9 +40,7 @@ const BookingModal = ({ show, onHide, center }) => {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              aria-label="Select date"
             />
-            {/* Display "Today" text so Cypress can find it */}
             {date === new Date().toISOString().split("T")[0] && (
               <p className="text-muted mb-3">Today</p>
             )}
@@ -53,7 +51,6 @@ const BookingModal = ({ show, onHide, center }) => {
             <Form.Select
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              aria-label="Select time"
             >
               <option value="">Choose...</option>
               <option>10:00 AM</option>
@@ -61,7 +58,8 @@ const BookingModal = ({ show, onHide, center }) => {
               <option>03:00 PM</option>
               <option>05:00 PM</option>
             </Form.Select>
-            {/* Optionally, show default time label like "Morning" */}
+
+            {/* Show "Morning" text if time is 10:00 AM */}
             {time === "10:00 AM" && (
               <p className="text-muted mb-3">Morning</p>
             )}
