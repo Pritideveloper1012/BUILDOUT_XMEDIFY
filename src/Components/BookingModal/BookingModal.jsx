@@ -10,24 +10,8 @@ const BookingModal = ({ show, onHide, center }) => {
       const today = new Date().toISOString().split("T")[0];
       setDate(today);
       setTime("");
-      console.log("Modal opened: date set to", today);
     }
   }, [show]);
-
-  const getTimeLabel = (time) => {
-    switch (time) {
-      case "10:00 AM":
-        return "Morning";
-      case "12:00 PM":
-        return "Noon";
-      case "03:00 PM":
-        return "Afternoon";
-      case "05:00 PM":
-        return "Evening";
-      default:
-        return null;
-    }
-  };
 
   const handleBook = () => {
     if (!center) {
@@ -38,7 +22,11 @@ const BookingModal = ({ show, onHide, center }) => {
       alert("Please select date and time");
       return;
     }
-    const booking = { center, bookingDate: date, bookingTime: time };
+    const booking = {
+      center,
+      bookingDate: date,
+      bookingTime: time,
+    };
     const existing = JSON.parse(localStorage.getItem("bookings")) || [];
     localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
     alert("Appointment Booked!");
@@ -66,13 +54,10 @@ const BookingModal = ({ show, onHide, center }) => {
               value={date}
               min={today}
               max={maxDate}
-              onChange={(e) => {
-                setDate(e.target.value);
-                console.log("Date changed to:", e.target.value);
-              }}
+              onChange={(e) => setDate(e.target.value)}
             />
             {date === today && (
-              <p className="text-muted mb-3" data-testid="today-text">
+              <p className="text-muted mb-3">
                 Today
               </p>
             )}
@@ -80,13 +65,16 @@ const BookingModal = ({ show, onHide, center }) => {
 
           <Form.Group className="mt-3">
             <Form.Label>Select Time</Form.Label>
+            <div className="time-of-day-labels">
+              <p className="text-muted mb-3">Morning</p>
+              <p className="text-muted mb-3">Noon</p>
+              <p className="text-muted mb-3">Afternoon</p>
+              <p className="text-muted mb-3">Evening</p>
+            </div>
             <Form.Select
               id="time-select"
               value={time}
-              onChange={(e) => {
-                setTime(e.target.value);
-                console.log("Time changed to:", e.target.value);
-              }}
+              onChange={(e) => setTime(e.target.value)}
             >
               <option value="">Choose...</option>
               <option value="10:00 AM">10:00 AM</option>
@@ -94,12 +82,6 @@ const BookingModal = ({ show, onHide, center }) => {
               <option value="03:00 PM">03:00 PM</option>
               <option value="05:00 PM">05:00 PM</option>
             </Form.Select>
-
-            {time && (
-              <p className="text-muted mb-3" data-testid="time-label">
-                {getTimeLabel(time)}
-              </p>
-            )}
           </Form.Group>
         </Form>
       </Modal.Body>
