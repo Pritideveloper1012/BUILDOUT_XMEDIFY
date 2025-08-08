@@ -16,17 +16,16 @@ const Search = () => {
   const city = params.get("city");
 
   useEffect(() => {
-  if (state && city) {
-    setLoading(true);
-    fetchMedicalCenters(state, city).then((data) => {
-      setCenters(data);
+    if (state && city) {
+      setLoading(true);
+      fetchMedicalCenters(state, city).then((data) => {
+        setCenters(data);
+        setLoading(false);
+      });
+    } else {
       setLoading(false);
-    });
-  } else {
-    setLoading(false);
-  }
-}, [state, city]);
-
+    }
+  }, [state, city]);
 
   return (
     <>
@@ -36,21 +35,25 @@ const Search = () => {
           <p>Loading...</p>
         ) : (
           <>
-            <h4>
-              {centers.length} medical centers available in {state}
-            </h4>
+            <h1>
+              {centers.length} medical centers available in {city?.toLowerCase()}
+            </h1>
             {centers.length === 0 ? (
               <p>
                 No medical centers found in {city}, {state}.
               </p>
             ) : (
-              <ul>
+              <div>
                 {centers.map((center) => (
-                  <li key={center.id}>
+                  <div key={center.id} className="mb-4">
+                    <h3>{center["Hospital Name"]}</h3>
                     <HospitalCard data={center} />
-                  </li>
+                    <button className="btn btn-primary mt-2">
+                      Book FREE Center Visit
+                    </button>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
           </>
         )}
