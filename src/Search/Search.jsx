@@ -5,6 +5,7 @@ import HospitalCard from "../Components/HospitalCard/HospitalCard";
 import SearchBar from "../Components/SearchBar/SearchBar";
 import FAQs from "../Components/Sections/FAQs/FAQs";
 import DownloadApp from "../Components/Sections/DownloadApp/DownloadApp";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const Search = () => {
   const [params] = useSearchParams();
